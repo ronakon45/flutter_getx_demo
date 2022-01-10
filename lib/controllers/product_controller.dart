@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter_application_getx/constrings/mystrings.dart';
+import 'package:flutter_application_getx/models/product_fake_api_model.dart';
 import 'package:flutter_application_getx/models/product_model.dart';
-import 'package:flutter_application_getx/models/randomuser_model.dart';
 // import 'package:flutter_application_getx/models/app_requests/product_request.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -10,11 +10,10 @@ import 'package:http/http.dart' as http;
 class ProductController extends GetxController {
   var product = RxList<ProductModel>().obs();
   var randomusers = RxList().obs();
-  var myList = [1, 2, 3];
+
+  var productFAKEs = RxList<ProductFakeApiModel>().obs();
 
   Future<void> getProduct() async {
-    randomusers.assignAll(myList);
-
     // var headers = {
     //   HttpHeaders.contentTypeHeader: "application/json",
     //   HttpHeaders.authorizationHeader:
@@ -31,12 +30,10 @@ class ProductController extends GetxController {
     //     'https://serviceapi.dev.itraces.me/Product/GetByPartner/2126/P02');
     // print(url);
 
-    var url = Uri.parse('https://randomuser.me/api/?results=10');
+    // var url = Uri.parse('https://randomuser.me/api/?results=10');
 
+    var url = Uri.parse('https://fakestoreapi.com/products?limit=5');
     try {
-      print("try");
-      print(url);
-
       var response = await http.get(
         url,
         // headers: headers,
@@ -44,7 +41,8 @@ class ProductController extends GetxController {
       if (response.statusCode == 200) {
         print("OK 200");
         print(response.body);
-
+        final productFakeApiModel = productFakeApiModelFromJson(response.body);
+        productFAKEs.assignAll(productFakeApiModel);
         // var jsonResponse =
         //     convert.jsonDecode(response.body) as Map<String, dynamic>;
         // var itemCount = jsonResponse['totalItems'];
@@ -53,8 +51,8 @@ class ProductController extends GetxController {
 
         // randomuser.assignAll();
 
-        final randomUserModel = randomUserModelFromJson(response.body);
-        print(randomUserModel.results.toList());
+        // final randomUserModel = randomUserModelFromJson(response.body);
+        // print(randomUserModel.results.toList());
 
         // randomusers
         //     .assignAll(randomUserModelFromJson(response.body).results.toList());

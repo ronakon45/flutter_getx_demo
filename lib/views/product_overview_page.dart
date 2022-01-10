@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_getx/controllers/product_controller.dart';
+import 'package:flutter_application_getx/models/product_fake_api_model.dart';
+import 'package:flutter_application_getx/wigets/product_card.dart';
 import 'package:get/get.dart';
 
 class ProductOverviewPage extends StatefulWidget {
@@ -23,24 +25,35 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GetX Network Call'),
+        title: const Text('Simple Get & show Card'),
       ),
-      body:
-
-          // Obx(
-          //   () => ListView.builder(
-          //       itemCount: _controller.product.length,
-          //       itemBuilder: (context, index) =>
-          //           Text(_controller.product[index].descTha)),
-          // ),
-
-          Obx(
+      body: Obx(
         () => ListView.builder(
-            itemCount: _controller.randomusers.length,
-            itemBuilder: (context, index) =>
-                Text(_controller.randomusers[index].toString())),
+            itemCount: _controller.productFAKEs.length,
+            itemBuilder: (context, index) {
+              // Text(_controller.productFAKEs[index].title)),
+              final product = _controller.productFAKEs[index];
+              return buildCard(product);
+            }),
       ),
     );
+  }
+}
+
+Widget buildCard(ProductFakeApiModel product) {
+  // if (recipe.cardType == RecipeCardType.card1) {
+  //   return Card1(recipe: recipe);
+  // } else if (recipe.cardType == RecipeCardType.card2) {
+  //   return Card2(recipe: recipe);
+  // } else if (recipe.cardType == RecipeCardType.card3) {
+  //   return Card3(recipe: recipe);
+  // } else {
+  //   throw Exception('This card doesn\'t exist yet');
+  // }
+  if (product.title != "") {
+    return ProductCard(product: product);
+  } else {
+    throw Exception('This card doesn\'t exist yet');
   }
 }
 
