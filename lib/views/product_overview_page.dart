@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_getx/controllers/product_controller.dart';
-import 'package:flutter_application_getx/models/app_requests/product_request.dart';
 import 'package:get/get.dart';
 
 class ProductOverviewPage extends StatefulWidget {
@@ -26,11 +25,20 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
       appBar: AppBar(
         title: const Text('GetX Network Call'),
       ),
-      body: Obx(
+      body:
+
+          // Obx(
+          //   () => ListView.builder(
+          //       itemCount: _controller.product.length,
+          //       itemBuilder: (context, index) =>
+          //           Text(_controller.product[index].descTha)),
+          // ),
+
+          Obx(
         () => ListView.builder(
-            itemCount: _controller.product.length,
+            itemCount: _controller.randomusers.length,
             itemBuilder: (context, index) =>
-                Text(_controller.product[index].descTha)),
+                Text(_controller.randomusers[index].toString())),
       ),
     );
   }

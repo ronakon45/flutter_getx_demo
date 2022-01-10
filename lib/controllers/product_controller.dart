@@ -1,20 +1,20 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_application_getx/constrings/mystrings.dart';
 import 'package:flutter_application_getx/models/product_model.dart';
+import 'package:flutter_application_getx/models/randomuser_model.dart';
 // import 'package:flutter_application_getx/models/app_requests/product_request.dart';
 import 'package:get/get.dart';
-
-// import 'dart:convert' as convert;
-
 import 'package:http/http.dart' as http;
 
 class ProductController extends GetxController {
   var product = RxList<ProductModel>().obs();
+  var randomusers = RxList().obs();
+  var myList = [1, 2, 3];
+
   Future<void> getProduct() async {
+    randomusers.assignAll(myList);
+
     // var headers = {
     //   HttpHeaders.contentTypeHeader: "application/json",
     //   HttpHeaders.authorizationHeader:
@@ -27,24 +27,44 @@ class ProductController extends GetxController {
       'Authorization': 'Bearer $token',
     };
 
-    var url = Uri.parse(
-        'https://serviceapi.dev.itraces.me/Product/GetByPartner/2126/P02');
-    print(url);
+    // var url = Uri.parse(
+    //     'https://serviceapi.dev.itraces.me/Product/GetByPartner/2126/P02');
+    // print(url);
 
-    // var url = Uri.parse('https://randomuser.me/api/?results=10');
+    var url = Uri.parse('https://randomuser.me/api/?results=10');
 
     try {
+      print("try");
+      print(url);
+
       var response = await http.get(
         url,
-        headers: headers,
+        // headers: headers,
       );
       if (response.statusCode == 200) {
-        product.assignAll(productModelFromJson(response.body));
+        print("OK 200");
+        print(response.body);
 
         // var jsonResponse =
         //     convert.jsonDecode(response.body) as Map<String, dynamic>;
         // var itemCount = jsonResponse['totalItems'];
-        print(response.body);
+
+        // product.assignAll(productModelFromJson(response.body));
+
+        // randomuser.assignAll();
+
+        final randomUserModel = randomUserModelFromJson(response.body);
+        print(randomUserModel.results.toList());
+
+        // randomusers
+        //     .assignAll(randomUserModelFromJson(response.body).results.toList());
+
+        // var myList = [
+        //   {"user": "new"},
+        //   {"user": "new2"},
+        //   {"user": "new3"}
+        // ];
+        // randomusers.assignAll(myList);
       } else {
         print('Request failed with status: ${response.statusCode}.');
       }
@@ -53,15 +73,15 @@ class ProductController extends GetxController {
     }
   }
 
-  // Future<void> saveProduct(ProductRequest product) async {
-  //   var headers = {
-  //     'Content-Type': "application/json",
-  //     'Authorization': "Bearer " + token
-  //   };
+// Future<void> saveProduct(ProductRequest product) async {
+//   var headers = {
+//     'Content-Type': "application/json",
+//     'Authorization': "Bearer " + token
+//   };
 
-  //   var url = "https://serviceapi.dev.itraces.me/Product/GetByPartner/2126/P02";
-  //   var response =
-  //       await http.post(url, body: jsonEncode(product), headers: headers);
-  //   print(response);
-  // }
+//   var url = "https://serviceapi.dev.itraces.me/Product/GetByPartner/2126/P02";
+//   var response =
+//       await http.post(url, body: jsonEncode(product), headers: headers);
+//   print(response);
+// }
 }
