@@ -42,7 +42,8 @@ class ProductController extends GetxController {
         print("OK 200");
         print(response.body);
         final productFakeApiModel = productFakeApiModelFromJson(response.body);
-        productFAKEs.assignAll(productFakeApiModel);
+        // productFAKEs.assignAll(productFakeApiModel);
+        productFAKEs.addAll(productFakeApiModel);
         // var jsonResponse =
         //     convert.jsonDecode(response.body) as Map<String, dynamic>;
         // var itemCount = jsonResponse['totalItems'];

@@ -36,6 +36,12 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
               return buildCard(product);
             }),
       ),
+      floatingActionButton: ElevatedButton(
+        onPressed: () {
+          _controller.getProduct();
+        },
+        child: Text('Load more'),
+      ),
     );
   }
 }
