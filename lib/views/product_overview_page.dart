@@ -73,12 +73,12 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
           ),
         ),
       ),
-      floatingActionButton: ElevatedButton(
-        onPressed: () {
-          _controller.getProduct();
-        },
-        child: Text('Load more'),
-      ),
+      // floatingActionButton: ElevatedButton(
+      //   onPressed: () {
+      //     _controller.getProduct();
+      //   },
+      //   child: Text('Load more'),
+      // ),
     );
   }
 }
