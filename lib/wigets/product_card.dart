@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_getx/models/product_fake_api_model.dart';
+import 'package:flutter_application_getx/views/product_detail.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductFakeApiModel product;
@@ -36,6 +37,9 @@ class ProductCard extends StatelessWidget {
                     child: const Text('LEARN MORE'),
                     onPressed: () {
                       /* ... */
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              ProductDetail(product: product)));
                     },
                   )
                 ],

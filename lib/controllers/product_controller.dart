@@ -44,26 +44,6 @@ class ProductController extends GetxController {
         final productFakeApiModel = productFakeApiModelFromJson(response.body);
         // productFAKEs.assignAll(productFakeApiModel);
         productFAKEs.addAll(productFakeApiModel);
-        // var jsonResponse =
-        //     convert.jsonDecode(response.body) as Map<String, dynamic>;
-        // var itemCount = jsonResponse['totalItems'];
-
-        // product.assignAll(productModelFromJson(response.body));
-
-        // randomuser.assignAll();
-
-        // final randomUserModel = randomUserModelFromJson(response.body);
-        // print(randomUserModel.results.toList());
-
-        // randomusers
-        //     .assignAll(randomUserModelFromJson(response.body).results.toList());
-
-        // var myList = [
-        //   {"user": "new"},
-        //   {"user": "new2"},
-        //   {"user": "new3"}
-        // ];
-        // randomusers.assignAll(myList);
       } else {
         print('Request failed with status: ${response.statusCode}.');
       }

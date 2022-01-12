@@ -3,6 +3,7 @@ import 'package:flutter_application_getx/controllers/product_controller.dart';
 import 'package:flutter_application_getx/models/product_fake_api_model.dart';
 import 'package:flutter_application_getx/wigets/product_card.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProductOverviewPage extends StatefulWidget {
   const ProductOverviewPage({Key? key}) : super(key: key);
@@ -13,6 +14,24 @@ class ProductOverviewPage extends StatefulWidget {
 
 class _ProductOverviewPageState extends State<ProductOverviewPage> {
   final ProductController _controller = Get.find();
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onRefresh() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+
+    _refreshController.loadComplete();
+
+    _controller.getProduct();
+  }
 
   @override
   void initState() {
@@ -27,14 +46,32 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
       appBar: AppBar(
         title: const Text('Simple Get & show Card'),
       ),
-      body: Obx(
-        () => ListView.builder(
-            itemCount: _controller.productFAKEs.length,
-            itemBuilder: (context, index) {
-              // Text(_controller.productFAKEs[index].title)),
-              final product = _controller.productFAKEs[index];
-              return buildCard(product);
-            }),
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        enablePullUp: true,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                child: Obx(
+                  () => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _controller.productFAKEs.length,
+                    itemBuilder: (context, index) {
+                      // Text(_controller.productFAKEs[index].title)),
+                      final product = _controller.productFAKEs[index];
+                      return buildCard(product);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: ElevatedButton(
         onPressed: () {
@@ -47,45 +84,9 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
 }
 
 Widget buildCard(ProductFakeApiModel product) {
-  // if (recipe.cardType == RecipeCardType.card1) {
-  //   return Card1(recipe: recipe);
-  // } else if (recipe.cardType == RecipeCardType.card2) {
-  //   return Card2(recipe: recipe);
-  // } else if (recipe.cardType == RecipeCardType.card3) {
-  //   return Card3(recipe: recipe);
-  // } else {
-  //   throw Exception('This card doesn\'t exist yet');
-  // }
   if (product.title != "") {
     return ProductCard(product: product);
   } else {
     throw Exception('This card doesn\'t exist yet');
   }
 }
-
-// class ProductOverviewPage extends StatelessWidget {
-//   final ProductController _controller = Get.find();
-//   void SaveProduct() {
-//     var code = " Textcontre..text";
-//     var name = "";
-//     var description = "";
-
-//     var product = ProductRequest(code, name, description);
-//     // _controller.saveProduct(product);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     _controller.getProduct();
-//     return Obx(
-//       () => ListView.builder(
-//           itemCount: _controller.product.length,
-//           itemBuilder: (context, index) =>
-//               Text(_controller.product[index].descTha)),
-//     );
-//     // _controller.getProduct();
-//     // return MaterialButton(
-//     //   onPressed: () => SaveProduct(),
-//     // );
-//   }
-// }
