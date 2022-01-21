@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_getx/controllers/product_controller.dart';
 import 'package:flutter_application_getx/models/product_fake_api_model.dart';
@@ -13,6 +14,46 @@ class ProductOverviewPage extends StatefulWidget {
 }
 
 class _ProductOverviewPageState extends State<ProductOverviewPage> {
+  late FirebaseMessaging messaging;
+
+  @override
+  void initState() {
+    super.initState();
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) {
+      print(value);
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
+
+    _controller.getProduct();
+    _onPermissios();
+    super.initState();
+  }
+
+  Future<void> _onPermissios() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+  }
+
   final ProductController _controller = Get.find();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -31,13 +72,6 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
     _refreshController.loadComplete();
 
     _controller.getProduct();
-  }
-
-  @override
-  void initState() {
-    _controller.getProduct();
-
-    super.initState();
   }
 
   @override
